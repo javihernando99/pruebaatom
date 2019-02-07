@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>multiplicacion</title>
+</head>
+<body>
+<label>Introduce un numero multiplo de 2: </label><input id="cajaDatos" type="number" onfocus="parar()" ><br>
+<input type="submit" id="botonMultiplicar" value="multiplicar" onclick="empezar()">
+<input type="submit" id="botonParar" value="parar" onclick="parar()" disabled>
+<input type="submit" id="botonResetear" value="resetear" onclick="resetear()" disabled>
+<p id="informacion"></p>
+<script>
+
+
+    function multiplicar() {
+        var informacionCaja = document.getElementById("cajaDatos");
+
+        var logaritmo = Math.log2(informacionCaja.value);
+
+        if (!isNaN(informacionCaja.value) && logaritmo % 1 == 0) {
+            var resultado = informacionCaja.value * 2;
+            informacionCaja.value = resultado;
+            informacionCaja.style.borderColor = null;
+            document.getElementById("informacion").innerHTML="";
+
+        } else {
+            informacionCaja.style.borderColor = "red";
+            mostrarMensaje();
+        }
+    }
+
+    function resetear() {
+        var cajaDatos = document.getElementById("cajaDatos");
+        cajaDatos.value = 1;
+    }
+
+    function empezar() {
+        realizaFuncion = setInterval(multiplicar, 1000);
+        document.getElementById("botonResetear").disabled = false;
+        document.getElementById("botonMultiplicar").disabled = true;
+        document.getElementById("botonParar").disabled = false;
+    }
+
+    function parar() {
+        clearInterval(realizaFuncion);
+        document.getElementById("botonMultiplicar").disabled = false;
+    }
+
+    function mostrarMensaje() {
+        document.getElementById("cajaDatos").focus();
+        document.getElementById("cajaDatos").addEventListener("blur",function () {
+            document.getElementById("informacion").innerHTML="introduce el valor correcto";
+        });
+        setTimeout(function () {
+            document.getElementById("informacion").innerHTML="introduce el valor correcto";
+        },3000);
+
+
+
+    }
+
+</script>
+</body>
+</html>

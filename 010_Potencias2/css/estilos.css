@@ -1,0 +1,11 @@
+.aviso {
+	background-color: #ffaaaa;
+}
+
+#mensajeError {
+    color: red;
+}
+
+.oculto {
+	display: none;
+}

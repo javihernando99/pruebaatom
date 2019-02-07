@@ -1,0 +1,351 @@
+<html>
+
+<head>
+
+    <style type="text/css">
+        #tablero {
+            width: 50em;
+            height: 50em;
+        }
+
+        .casilla {
+            display: inline-block;
+            border: 1px solid black;
+            width: 16.3em;
+            height: 16.3em;
+        }
+
+        .j1 {
+            background-color: blue;
+        }
+
+        .j2 {
+            background-color: red;
+        }
+
+        .ocupada {
+            background-color: black;
+        }
+
+        #juegoTerminado {
+            font-size: 300%;
+            color: purple;
+        }
+        .bordeJ1{
+            border: 2px solid blue;
+        }
+        .bordeJ2{
+            border: 2px solid red;
+        }
+    </style>
+
+
+
+    <script>
+
+        "use strict";
+
+        // INICIALIZACIÓN
+
+        var pJuegoTerminado;
+        var tablero;
+
+        function inicializar() {
+            pJuegoTerminado = document.getElementById("juegoTerminado");
+
+            tablero = new Tablero();
+
+            tablero.annadirSuscriptorCasillaMarcada(casillaMarcada);
+            tablero.annadirSuscriptorCasillaNoMarcable(parpadearCasillaNoMarcable);
+            tablero.annadirSuscriptorJuegoTerminado(juegoTerminado);
+            tablero.annadirSuscriptoresDecidirturno(actualizarTextoJugadorActual);
+            tablero.annadirSuscriptoresDecidirturno(colorearBordes);
+        }
+
+
+
+        // MANEJADORES / HANDLERS
+
+        function teclaPulsada(evento) {
+            var keyCode = evento.keyCode; // Se captura el código de la tecla pulsada.
+            var casilla = -1; // Albergará la casilla elegida, 0-8.
+
+            // Si la tecla es válida se asignará a casilla un valor entre 0 y 8.
+
+            // El 1 normal es 49 y el 9 normal es 57.
+            if (keyCode >= 49 && keyCode <= 57) casilla = keyCode - 49;
+            // El 1 del numpad es 97 y el 9 del numpad es 105.
+            else if (keyCode >= 97 && keyCode <= 105) casilla = keyCode - 97;
+
+            // En este punto, si han pulsado 1 (en el teclado que sea: la fila de números o el
+            // teclado numérico), casilla tendrá un 0. Si han pulsado 2, casilla tendrá un 1, etc.
+
+            // Solo continuaremos si la tecla era válida (0-8).
+            // Sr. Javascript, gracias por informarme de la tecla pero, en este caso, no estoy interesado.
+            if (casilla == -1) return;
+
+            var fila = Math.floor(casilla / 3);
+            var columna = casilla % 3;
+
+            tablero.marcar(fila, columna);
+
+            /*
+            FILA:
+            0/3 = 0
+            1/3 = 0
+            2/3 = 0
+            3/3 = 1
+            4/3 = 1
+            5/3 = 1
+            6/3 = 2
+            7/3 = 2
+            8/3 = 2
+
+            COLUMNA:
+            0%3 = 0
+            1%3 = 1
+            2%3 = 2
+            3%3 = 0
+            4%3 = 1
+            5%3 = 2
+            6%3 = 0
+            7%3 = 1
+            8%3 = 2
+            */
+        }
+
+        function casillaMarcada(fila, columna) {
+            var idCasilla = generarIdCasilla(fila, columna);
+            var classJugadorActual = generarClassJugadorActual(tablero.getJugadorActual());
+            document.getElementById(idCasilla).classList.add(classJugadorActual);
+
+        }
+
+        function parpadearCasillaNoMarcable(fila, columna) {
+            var idCasilla = generarIdCasilla(fila, columna);
+
+            document.getElementById(idCasilla).classList.add("ocupada");
+
+            setTimeout(function() { document.getElementById(idCasilla).classList.remove("ocupada"); }, 300);
+        }
+
+        function generarIdCasilla(fila, columna) {
+            return "c" + fila + columna; // ¡Concatenará!
+        }
+
+        function generarClassJugadorActual(jugadorActual) {
+            return "j" + jugadorActual; // ¡Concatenará!
+        }
+
+        function juegoTerminado(estadoJuego) {
+            if (estadoJuego==0) {
+                pJuegoTerminado.innerHTML = "Empate";
+            }else {
+                pJuegoTerminado.innerHTML = "¡Ha ganado el jugador " + tablero.getJugadorActual() + "!";
+            }
+        }
+        function colorearBordes(jugadoActual) {
+            if (jugadoActual==1) {
+                document.getElementById("tablero").classList.add("bordeJ2");
+            }else {
+
+                document.getElementById("tablero").classList.remove("bordeJ2");
+                document.getElementById("tablero").classList.add("bordeJ1");
+            }
+
+        }
+
+        function actualizarTextoJugadorActual(jugadorActual) {
+            if (jugadorActual==1){
+
+                document.getElementById("turnoJugador").innerHTML="es el turno del jugador 2";
+            } else{
+                document.getElementById("turnoJugador").innerHTML="es el turno del jugador 1";
+            }
+
+        }
+
+
+        // LÓGICA INTERNA
+
+        class Tablero {
+            constructor() {
+                this.suscriptoresCasillaMarcada = [];
+                this.suscriptoresCasillaNoMarcable = [];
+                this.suscriptoresJuegoTerminado = [];
+                this.suscriptoresDecidirturno=[];
+
+                this.matriz = [];
+
+                for (var fila=0; fila<3; fila++) {
+                    this.matriz[fila] = [];
+                    for (var columna=0; columna<3; columna++) {
+                        this.matriz[fila][columna] = 0;
+                    }
+                }
+
+                this.jugadorActual = 1;
+                this.casillasOcupadas = 0;
+            }
+            annadirSuscriptoresDecidirturno(s){
+                this.suscriptoresDecidirturno.push(s);
+            }
+            retirarSuscriptoresDecidirTurno(s){
+                this.suscriptoresDecidirturno.delete(s);
+            }
+            annadirSuscriptorCasillaMarcada(s) {
+                this.suscriptoresCasillaMarcada.push(s);
+            }
+
+            retirarSuscriptorCasillaMarcada(s) {
+                this.suscriptoresCasillaMarcada.delete(s);
+            }
+
+            annadirSuscriptorCasillaNoMarcable(s) {
+                this.suscriptoresCasillaNoMarcable.push(s);
+            }
+
+            retirarSuscriptorCasillaNoMarcable(s) {
+                this.suscriptoresCasillaNoMarcable.delete(s);
+            }
+
+            annadirSuscriptorJuegoTerminado(s) {
+                this.suscriptoresJuegoTerminado.push(s);
+            }
+
+            retirarSuscriptorJuegoTerminado(s) {
+                this.suscriptoresJuegoTerminado.delete(s);
+            }
+
+            notificarSuscriptoresCasillaMarcada(fila, columna) {
+                // Para CADA uno de los suscriptores (que son funciones),
+                // se ejecuta una llamada a la función suscriptora pasándole
+                // como parámetro la fila y columna recién marcadas.
+                this.suscriptoresCasillaMarcada.forEach(suscriptor => suscriptor(fila, columna));
+            }
+
+            notificarSuscriptoresCasillaNoMarcable(fila, columna) {
+                // Para CADA uno de los suscriptores (que son funciones),
+                // se ejecuta una llamada a la función suscriptora pasándole
+                // como parámetro la fila y columna recién clickada (y que está ocupada).
+                this.suscriptoresCasillaNoMarcable.forEach(suscriptor => suscriptor(fila, columna));
+            }
+
+            notificarSuscriptoresJuegoTerminado(estadoJuego) {
+                // Para CADA uno de los suscriptores (que son funciones),
+                // se ejecuta una llamada a la función suscriptora pasándole
+                // como parámetro la fila y columna recién clickada (y que está ocupada).
+                this.suscriptoresJuegoTerminado.forEach(suscriptor => suscriptor(estadoJuego));
+            }
+            notificarSuscriptoresDecidirTurno(jugadorActual){
+                // Para CADA uno de los suscriptores (que son funciones),
+                // se ejecuta una llamada a la función suscriptora pasándole
+                // como parámetro el jugado actual al que pertenece el turno .
+                this.suscriptoresDecidirturno.forEach(suscriptor => suscriptor(jugadorActual));
+        }
+            getJugadorActual() {
+                return this.jugadorActual;
+            }
+
+            cambiarTurno() {
+                if (this.jugadorActual == 1){
+                   this.notificarSuscriptoresDecidirTurno(this.jugadorActual);
+                    this.jugadorActual = 2;
+
+                }
+                else {/* (era el 2) */
+                    this.notificarSuscriptoresDecidirTurno(this.jugadorActual);
+                    this.jugadorActual = 1;
+                }
+                //this.notificarSuscriptoresDecidirTurno(this.jugadorActual);
+            }
+
+            // Los parámetros vienen en forma de 0 a N-1.
+            marcar(fila, columna) {
+                // Si el juego ya ha terminado (tablas o ganador), volvemos sin hacer nada.
+                if (this.buscarGanador() != -1) {
+                    // Pero hacemos saber al usuario que eso no es posible:
+                    this.notificarSuscriptoresCasillaNoMarcable(fila, columna);
+                    return;
+                }
+
+                if (this.matriz[fila][columna] == 0) {
+                    this.casillasOcupadas++;
+
+                    this.matriz[fila][columna] = this.jugadorActual;
+
+                    this.notificarSuscriptoresCasillaMarcada(fila, columna);
+
+                    var estadoJuego = this.buscarGanador();
+                    if (estadoJuego != -1) {
+                        this.notificarSuscriptoresJuegoTerminado(estadoJuego);
+                    } else {
+                        this.cambiarTurno();
+                    }
+                } else { // Casilla ya estaba ocupada
+                    this.notificarSuscriptoresCasillaNoMarcable(fila, columna);
+                }
+            }
+
+            // -1: no ha terminado el juego
+            // 0: tablas
+            // 1: gana el jugador actual
+            buscarGanador() {
+                var j = this.jugadorActual;
+
+                // Mirar a ver si hay un ganador.
+
+                if (this.matriz[0][0] == j && this.matriz[0][1] == j && this.matriz[0][2] == j) return 1;
+                if (this.matriz[1][0] == j && this.matriz[1][1] == j && this.matriz[1][2] == j) return 1;
+                if (this.matriz[2][0] == j && this.matriz[2][1] == j && this.matriz[2][2] == j) return 1;
+
+                if (this.matriz[0][0] == j && this.matriz[1][0] == j && this.matriz[2][0] == j) return 1;
+                if (this.matriz[0][1] == j && this.matriz[1][1] == j && this.matriz[2][1] == j) return 1;
+                if (this.matriz[0][2] == j && this.matriz[1][2] == j && this.matriz[2][2] == j) return 1;
+
+                if (this.matriz[0][0] == j && this.matriz[1][1] == j && this.matriz[2][2] == j) return 1;
+                if (this.matriz[0][2] == j && this.matriz[1][1] == j && this.matriz[2][0] == j) return 1;
+
+
+
+                // Si llegamos hasta aquí, es que no hay ganador, o no lo hay por ahora.
+
+                // Mirar a ver si hay tablas (si está todo ocupado pero no hay ganador, las hay).
+                if (this.casillasOcupadas == 9) return 0;
+
+
+
+                // Si llegamos hasta aquí, ni hay ganador, ni hay tablas.
+                // Hay que seguir jugando.
+                return -1;
+            }
+        }
+
+    </script>
+
+</head>
+
+
+
+<body onload="inicializar()" onkeyup="teclaPulsada(event)">
+
+<p id="juegoTerminado"></p>
+<p id="turnoJugador">empieza jugador 1</p>
+
+<div id="tablero">
+    <div id="c00" class="casilla" onclick="tablero.marcar(0, 0);"></div>
+    <div id="c01" class="casilla" onclick="tablero.marcar(0, 1);"></div>
+    <div id="c02" class="casilla" onclick="tablero.marcar(0, 2);"></div>
+    <br>
+    <div id="c10" class="casilla" onclick="tablero.marcar(1, 0);"></div>
+    <div id="c11" class="casilla" onclick="tablero.marcar(1, 1);"></div>
+    <div id="c12" class="casilla" onclick="tablero.marcar(1, 2);"></div>
+    <br>
+    <div id="c20" class="casilla" onclick="tablero.marcar(2, 0);"></div>
+    <div id="c21" class="casilla" onclick="tablero.marcar(2, 1);"></div>
+    <div id="c22" class="casilla" onclick="tablero.marcar(2, 2);"></div>
+</div>
+
+</body>
+
+</html>

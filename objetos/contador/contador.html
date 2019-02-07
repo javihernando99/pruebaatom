@@ -1,0 +1,129 @@
+<html>
+
+<head>
+
+    <style type="text/css">
+
+    </style>
+
+
+
+    <script>
+
+        "use strict";
+
+        // INICIALIZACIÓN
+
+        var spanValorTitulo;
+        var spanValorParrafo;
+        var contador;
+
+        function inicializar() {
+            spanValorTitulo = document.getElementById("spanValorTitulo");
+            spanValorParrafo = document.getElementById("spanValorParrafo");
+
+            contador = new Contador();
+
+            contador.annadirSuscriptor(actualizarValorTitulo);
+            contador.annadirSuscriptor(actualizarValorParrafo);
+        }
+
+
+
+        // MANEJADORES / HANDLERS
+
+        function variarClick(n) {
+            // El parseInt es necesario ya que, si no, en lugar de sumar concatena.
+            // Esta función es la frontera entre el mundo HTML y el mundo JS.
+            // Por tanto, este es el mejor sitio para realizar estas conversiones de tipo.
+            contador.incrementar(parseInt(n));
+        }
+
+        function actualizarValorTitulo(valor) {
+            // En este punto no es necesario realizar conversiones de valor porque al
+            // asignarlo al innerHTML se convertirá automáticamente a string.
+            spanValorTitulo.innerHTML = valor;
+        }
+
+        function actualizarValorParrafo(valor) {
+            // En este punto no es necesario realizar conversiones de valor porque al
+            // asignarlo al innerHTML se convertirá automáticamente a string.
+            spanValorParrafo.innerHTML = valor;
+        }
+
+
+
+        // LÓGICA INTERNA
+
+        class Contador {
+            constructor(valor) {
+                this.suscriptores = [];
+
+                if (valor != null) this.setValor(valor);
+                else this.resetear();
+            }
+
+            annadirSuscriptor(s) {
+                this.suscriptores.push(s);
+
+                // Se notifica al suscriptor recién añadido con el valor actual.
+                s(this.valor);
+            }
+
+            retirarSuscriptor(s) {
+                this.suscriptores.delete(s);
+            }
+
+            notificarSuscriptores() {
+                // Para CADA uno de los suscrioptores (que son funciones),
+                // se ejecuta una llamada a la función suscriptora pasándole
+                // como parámetro el valor actual del contador.
+                this.suscriptores.forEach(suscriptor => suscriptor(this.valor));
+            }
+
+            getValor() {
+                return this.valor;
+            }
+
+            setValor(valor) {
+                this.valor = valor;
+                this.notificarSuscriptores();
+            }
+
+            resetear() {
+                this.setValor(100);
+            }
+
+            incrementar(n) {
+                if (n == null) n = 1;
+
+                this.setValor(this.valor + n);
+            }
+
+            decrementar(n) {
+                incrementar(-n);
+            }
+        }
+
+    </script>
+
+</head>
+
+
+
+<body onload="inicializar()">
+
+<h1>Y van <span id="spanValorTitulo">999</span> chipiklanders.</h1>
+
+<button type="button" onclick="variarClick(-1)" />-1</button>
+<button type="button" onclick="variarClick(1)" />+1</button><br/><br/>
+
+<button type="button" onclick="variarClick(-document.getElementById('variacion').value)">-N</button>
+<input type="number" id="variacion" />
+<button type="button" onclick="variarClick(document.getElementById('variacion').value)">+N</button>
+
+<p>El valor que tenemos guardado es el <span id="spanValorParrafo">999</span> y, como se ve, meterlo en un span es una manera de intercalarlo en mitad de un párrafo.</p>
+
+</body>
+
+</html>

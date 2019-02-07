@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>tresen raya</title>
+    <link rel="stylesheet" href="tresenraya.css">
+</head>
+<body>
+<div id="1primeralinea" onclick="cambiaColor('1primeralinea')"></div>
+<div id="2primeralinea" onclick="cambiaColor('2primeralinea')"></div>
+<div id="3primeralinea" onclick="cambiaColor('3primeralinea')"></div>
+<br>
+<div id="1segundalinea" onclick="cambiaColor('1segundalinea')"></div>
+<div id="2segundalinea" onclick="cambiaColor('2segundalinea')"></div>
+<div id="3segundalinea" onclick="cambiaColor('3segundalinea')"></div>
+<br>
+<div id="1terceralinea" onclick="cambiaColor('1terceralinea')"></div>
+<div id="2terceralinea" onclick="cambiaColor('2terceralinea')"></div>
+<div id="3terceralinea" onclick="cambiaColor('3terceralinea')"></div><br>
+
+<input type="button" value="Reseteajuego" onclick="resetear()"><br>
+<p id="parrafo"></p>
+
+<script>
+    "use strict";
+    var count1 = 1;
+
+    function cambiaColor(id_caja) {
+        if (count1 % 2 == 0) {
+            document.getElementById(id_caja).style.background = "blue";
+            count1++;
+        } else {
+            document.getElementById(id_caja).style.background = "red";
+            count1++;
+        }
+ganar();
+
+        function ganar() {
+            if (document.getElementById("1primeralinea").style.background=="red" &&
+            document.getElementById("2primeralinea").style.background=="red" &&
+            document.getElementById("3primeralinea").style.background=="red"||
+                document.getElementById("1primeralinea").style.background=="blue" &&
+                document.getElementById("2primeralinea").style.background=="blue" &&
+                document.getElementById("3primeralinea").style.background=="blue"){
+                document.getElementById("parrafo").innerHTML="Has ganado";
+            }
+            if (document.getElementById("1segundalinea").style.background=="red" &&
+                document.getElementById("2segundalinea").style.background=="red" &&
+                document.getElementById("3segundalinea").style.background=="red"||
+                document.getElementById("1segundalinea").style.background=="blue" &&
+                document.getElementById("2segundalinea").style.background=="blue" &&
+                document.getElementById("3segundalinea").style.background=="blue"){
+                document.getElementById("parrafo").innerHTML="Has ganado";
+            }
+            if (document.getElementById("1segundalinea").style.background=="red" &&
+                document.getElementById("2segundalinea").style.background=="red" &&
+                document.getElementById("3segundalinea").style.background=="red"||
+                document.getElementById("1segundalinea").style.background=="blue" &&
+                document.getElementById("2segundalinea").style.background=="blue" &&
+                document.getElementById("3segundalinea").style.background=="blue"){
+                document.getElementById("parrafo").innerHTML="Has ganado";
+            }
+            if (document.getElementById("1terceralinea").style.background=="red" &&
+                document.getElementById("2terceralinea").style.background=="red" &&
+                document.getElementById("3terceralinea").style.background=="red"||
+                document.getElementById("1terceralinea").style.background=="blue" &&
+                document.getElementById("2terceralinea").style.background=="blue" &&
+                document.getElementById("3terceralinea").style.background=="blue"){
+                document.getElementById("parrafo").innerHTML="Has ganado";
+            }
+            if (document.getElementById("1primeralinea").style.background=="red" &&
+                document.getElementById("2segundalinea").style.background=="red" &&
+                document.getElementById("3terceralinea").style.background=="red"||
+                document.getElementById("1primeralinea").style.background=="blue" &&
+                document.getElementById("2segundalinea").style.background=="blue" &&
+                document.getElementById("3terceralinea").style.background=="blue"){
+                document.getElementById("parrafo").innerHTML="Has ganado";
+            }
+            if (document.getElementById("3primeralinea").style.background=="red" &&
+                document.getElementById("2segundalinea").style.background=="red" &&
+                document.getElementById("1terceralinea").style.background=="red"||
+                document.getElementById("3primeralinea").style.background=="blue" &&
+                document.getElementById("2segundalinea").style.background=="blue" &&
+                document.getElementById("1terceralinea").style.background=="blue"){
+                document.getElementById("parrafo").innerHTML="Has ganado";
+            }
+        }
+
+    }
+    function resetear() {
+        count1=1;
+        document.getElementById("1primeralinea").style.background="white";
+        document.getElementById("2primeralinea").style.background="white";
+        document.getElementById("3primeralinea").style.background="white";
+        document.getElementById("1segundalinea").style.background="white";
+        document.getElementById("2segundalinea").style.background="white";
+        document.getElementById("3segundalinea").style.background="white";
+        document.getElementById("1terceralinea").style.background="white";
+        document.getElementById("2terceralinea").style.background="white";
+        document.getElementById("3terceralinea").style.background="white";
+        document.getElementById("parrafo").innerHTML="      ";
+    }
+
+
+</script>
+</body>
+</html>

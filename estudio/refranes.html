@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>refranes</title>
+</head>
+<body>
+<p id="salida"></p>
+
+
+<script>
+    var refranes = ["frases celebres de don alfonsito",
+            "miralo en el manual",
+            "no es mi problema ",
+            "si es tu ordena no es mi problema",
+            "no seras tu tronista "],
+        ind = 0;
+    setInterval(muestraSiguienteRefran, 2000);
+
+    function muestraSiguienteRefran() {
+        ind++;
+        if (ind == refranes.length) {
+            ind = 0;
+        }
+        document.getElementById("salida").innerHTML=refranes[ind];
+    }
+</script>
+
+
+</body>
+</html>

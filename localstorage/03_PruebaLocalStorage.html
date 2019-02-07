@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <script>
+        var lista;
+
+        function inicializar() {
+            if (!localStorage.lista) { // Si NO existe el valor en localStorage, lo creo.
+                lista = [];
+                localStorage.lista = JSON.stringify(lista);
+            } else { // Si SÍ existe el valor en localStorage, lo cargo.
+                lista = JSON.parse(localStorage.lista);
+            }
+
+            actualizarInformacion();
+        }
+
+        function annadirNumero() {
+            var numero = Math.floor(1+Math.random()*99);
+            lista.push(numero);
+
+            localStorage.lista = JSON.stringify(lista);
+
+            actualizarInformacion();
+        }
+
+        function actualizarInformacion() {
+            document.getElementById("lista").innerHTML = JSON.stringify(lista);
+        }
+
+        function resetear() {
+            localStorage.removeItem("lista");
+
+            inicializar();
+        }
+
+    </script>
+</head>
+
+
+
+<body onload="inicializar()">
+
+<button type="button" onclick="annadirNumero();">Anexar un número</button><br>
+<button type="button" onclick="resetear();">Resetear</button>
+
+<p id="lista">XXXXXXX</p>
+
+<p>Haz click y se añadirá un número a la lista. Aunque cierres el navegador e incluso apagues el ordenador, la lista mantendrá sus valores.</p>
+
+</body>
+
+</html>

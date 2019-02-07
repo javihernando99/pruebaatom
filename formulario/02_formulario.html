@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>formulario</title>
+</head>
+<body>
+<form>
+    <label>Nombre : </label><input type="text" name="nombre" placeholder="nombre" required autofocus><br>
+    <label>Primer apellido: </label><input type="text" name="apellido1" required><br>
+    <label>Apellido dos</label><input type="text" name="apellido2"><br>
+    <label>Contraseña : </label><input type="password" id="contrasena1" required><br>
+    <label>repetir contraseña : </label><input type="password" id="contrasena2" required><br>
+    <label>Email: </label><input type="email" name="nombre"><br>
+    <label>Telefono: </label><input type="tel" name="telefono" pattern="[+0-9]{9,12}"><br>
+    <label>Edad: </label><input type="number" name="edad" id="edad" min="18" max="65"><br>
+    <label>url: </label><input type="text" name="url" pattern="(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})" ><br>
+    <label>fecha: </label><input type="date"name="fecha"><br>
+    <label>hora: </label><input type="time"name="hora"><br>
+    <label> idusuario; </label><input id="id1" type="number" max="4"><br>
+    <input type="submit" onclick="comprobar()">
+    <p id="demo"></p>
+</form>
+<script>
+    function comprobar() {
+        var campoContrasena1 = document.getElementById("contrasena1");
+        var campoContrasena2 = document.getElementById("contrasena2");
+        if (campoContrasena1.value != campoContrasena2.value) {
+            contrasena2.setCustomValidity("las contaseñas deben ser iguales");
+        }else{
+            contrasena2.setCustomValidity("");
+        }
+
+        var inpObj = document.getElementById("edad");
+        if (!inpObj.checkValidity()) {
+           // document.getElementById("demo").innerHTML = inpObj.validationMessage;
+            inpObj.setCustomValidity("introduce el numero correcto")
+        } else {
+            //document.getElementById("demo").innerHTML = "Input OK";
+            inpObj.setCustomValidity('');
+        }
+        var txt = "";
+        if (document.getElementById("id1").validity.rangeOverflow) {
+            txt = "Value too large";
+        } else {
+            txt = "Input OK";
+        }
+        document.getElementById("demo").innerHTML = txt;
+
+    }
+
+</script>
+</body>
+</html>

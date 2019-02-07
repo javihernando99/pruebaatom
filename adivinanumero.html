@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ADIVINAA NUMERO</title>
+</head>
+<body>
+<form  id="form" action="">
+    <label>introduce numero</label>
+
+    <input type="number" name="numero" id="numero"><br>
+    <input type="number" name="numero" id="numero2" style="display: none"><br>
+    <input type="button" value="guardaNumero" onclick="guardaNumero() ">
+    <input type="button" value="adivinaNumero" onclick="adivinaNumero()"><br>
+    <input type="button" value="reseteaNumero" onclick="resetear() "><br>
+
+
+</form>
+<p id="parrafo"></p>
+<script>
+    var numeroGuardado;
+
+    function guardaNumero() {
+
+        numeroGuardado = document.getElementById("numero").value;
+        document.getElementById("numero").style.display = "none";
+        document.getElementById("numero2").style.display = "inline"
+
+    }
+
+    function adivinaNumero() {
+        var numeroAdivinar = document.getElementById("numero2").value;
+        if (numeroGuardado > numeroAdivinar) {
+
+            document.getElementById("parrafo").innerHTML = "el numero tiene que ser mayor";
+        }
+        else if (numeroGuardado < numeroAdivinar) {
+            document.getElementById("parrafo").innerHTML = "el numero tiene que ser menor";
+        } else {
+            document.getElementById("parrafo").innerHTML = "el numero es correcto";
+        }
+
+    }
+    function resetear() {
+        document.location.reload();
+
+    }
+</script>
+</body>
+</html>

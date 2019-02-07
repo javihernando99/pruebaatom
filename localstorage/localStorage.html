@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+
+        function inicializar() {
+            if (!localStorage.clicks) { // Si NO existe el valor en localStorage, lo creo.
+                localStorage.clicks = 0;
+            }
+
+            actualizarInformacion();
+        }
+
+        function contarClick() {
+            localStorage.clicks = Number(localStorage.clicks) + 1;
+
+            actualizarInformacion();
+        }
+
+        function actualizarInformacion() {
+            document.getElementById("resultado").innerHTML = "Llevamos " + localStorage.clicks + " clicks.";
+        }
+
+        function resetear() {
+            localStorage.removeItem("clicks");
+
+            inicializar();
+        }
+
+    </script>
+</head>
+
+
+
+<body onload="inicializar()">
+
+<button type="button" onclick="contarClick();">¡+1 click!</button><br>
+<button type="button" onclick="resetear();">Resetear</button>
+
+<p id="resultado">XXXXXXXXXXXXX</p>
+
+<p>Haz click y el contador se incrementará. Aunque cierres el navegador e incluso apagues el ordenador, el contador mantendrá su valor.</p>
+
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>conversiones</title>
+</head>
+<body>
+<label>decimal: </label><input type="text" id="decimal" name="decimal" onkeyup="gestionarPulsacionTeclaDecimal()">
+<label>binario: </label><input type="text" id="binario" name="binario" onkeyup="gestionarTeclaBinario()"
+                               pattern="[0-1]{0,9999999999999999}">
+<label>octal: </label><input type="text" id="octal" name="octal" onkeyup="gestionarPulsacionTeclaOctal()">
+<label>hexadecimal: </label><input type="text" id="hexadecimal" name="hexadecimal"
+                                   onkeyup="gestionarPulsacionTeclaHexadecimal()">
+<p id="info"></p>
+<button id="boton" onclick="limpiar()">limpiar</button>
+<script>
+    var valorDecimal = document.getElementById("decimal");
+    var valorBinario = document.getElementById("binario");
+    var valorOctal = document.getElementById("octal");
+    var valorHexadecimal = document.getElementById("hexadecimal");
+    var info = document.getElementById("info");
+
+    function limpiar() {
+        valorDecimal.value = null;
+        valorHexadecimal.value = null;
+        valorOctal.value = null;
+        valorBinario.value = null;
+        valorDecimal.style.borderColor = "";
+        info.innerHTML = "";
+
+    }
+
+    function gestionarPulsacionTeclaOctal() {
+        if (!isNaN(valorOctal.value)) {
+            conversionOctal();
+            quitarEstilo(valorOctal);
+        } else {
+            noEsCorrecto(valorOctal);
+        }
+
+    }
+
+    function gestionarPulsacionTeclaHexadecimal() {
+        conversionHexadecimal();
+        quitarEstilo(valorHexadecimal);
+
+    }
+
+    function gestionarPulsacionTeclaDecimal() {
+        if (!isNaN(valorDecimal.value)) {
+            conversionDecimal();
+            quitarEstilo(valorDecimal);
+        } else {
+            noEsCorrecto(valorDecimal);
+        }
+
+    }
+
+    function gestionarTeclaBinario() {
+        if (valorBinario.checkValidity()==true) {
+            conversionBinario();
+            quitarEstilo(valorBinario);
+        } else {
+            valorBinario.style.borderColor = "red";
+            valorBinario.addEventListener("blur", function () {
+                info.innerHTML = "introduce el valor correcto";
+
+            });
+            timeOut = setTimeout(function () {
+                if (!isNaN(valorBinario.value)) {
+                    info.innerHTML = "introduce el valor correcto";
+                }else if(isNaN(valorBinario.value)){
+                    info.innerHTML = "introduce el valor correcto";
+                } else {
+                    valorBinario.style.borderColor = null;
+                    info.innerHTML = "";
+                    return;
+                }
+
+            }, 3000);
+
+        }
+
+
+
+    }
+
+    function noEsCorrecto(tipoNumero) {
+        tipoNumero.style.borderColor = "red";
+        tipoNumero.addEventListener("blur", function () {
+            info.innerHTML = "introduce el valor correcto";
+
+        });
+        timeOut = setTimeout(function () {
+            if (isNaN(tipoNumero.value)) {
+                info.innerHTML = "introduce el valor correcto";
+            } else {
+                tipoNumero.style.borderColor = null;
+                info.innerHTML = "";
+                return;
+            }
+
+        }, 3000);
+
+    }
+
+    function quitarEstilo(tipoNumero) {
+        clearTimeout(timeOut);
+        tipoNumero.style.borderColor = null;
+        info.innerHTML = "";
+
+
+    }
+
+    function conversionDecimal() {
+
+
+        var conversion = parseInt(valorDecimal.value);
+
+        var binario = conversion.toString(2);
+        valorBinario.value = binario;
+
+        var octal = conversion.toString(8);
+        valorOctal.value = octal;
+
+        var hexadecimal = conversion.toString(16);
+        valorHexadecimal.value = hexadecimal;
+
+
+    }
+
+    function conversionBinario() {
+        var valorEnteroBinario = parseInt(valorBinario.value);
+
+
+        var decimal = parseInt(valorBinario.value, 2);
+        valorDecimal.value = decimal;
+
+        var octal = decimal.toString(8);
+        valorOctal.value = octal;
+
+        var hexadecimal = decimal.toString(16);
+        valorHexadecimal.value = hexadecimal;
+
+
+    }
+
+    function conversionOctal() {
+        var decimal = parseInt(valorOctal.value, 8);
+        valorDecimal.value = decimal;
+
+        var hexadecimal = decimal.toString(16);
+        valorHexadecimal.value = hexadecimal;
+
+        var binario = decimal.toString(2);
+        valorBinario.value = binario;
+    }
+
+
+    function conversionHexadecimal() {
+        var decimal = parseInt(valorHexadecimal.value, 16);
+        valorDecimal.value = decimal;
+        var octal = decimal.toString(8);
+        valorOctal.value = octal;
+        var binario = decimal.toString(2);
+        valorBinario.value = binario;
+
+    }
+
+
+</script>
+</body>
+</html>

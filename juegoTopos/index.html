@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Topos</title>
+</head>
+<body onload="inicializar()">
+<style>
+    .div {
+        border: solid 2px;
+        height: 100px;
+        width: 100px;
+        display: inline-block;
+    }
+
+    .topo {
+        border: solid 2px;
+        height: 100px;
+        width: 100px;
+        display: inline-block;
+        background-image: url("unnamed.png");
+    }
+
+    .topo2 {
+        border: solid 2px;
+        height: 100px;
+        width: 100px;
+        display: inline-block;
+        background-image: url("topo2.jpg");
+    }
+
+</style>
+<div class="div" id="1" onclick="jugar('1')"></div>
+<div class="div" id="2" onclick="jugar('2')"></div>
+<div class="div" id="3" onclick="jugar('3')"></div>
+<div class="div" id="4" onclick="jugar('4')"></div>
+<div class="div" id="5" onclick="jugar('5')"></div>
+<br>
+<div class="div" id="6" onclick="jugar('6')"></div>
+<div class="div" id="7" onclick="jugar('7')"></div>
+<div class="div" id="8" onclick="jugar('8')"></div>
+<div class="div" id="9" onclick="jugar('9')"></div>
+<div class="div" id="10" onclick="jugar('10')"></div>
+<br>
+<div class="div" id="11" onclick="jugar('11')"></div>
+<div class="div" id="12" onclick="jugar('12')"></div>
+<div class="div" id="13" onclick="jugar('13')"></div>
+<div class="div" id="14" onclick="jugar('14')"></div>
+<div class="div" id="15" onclick="jugar('15')"></div>
+<br>
+<div class="div" id="16" onclick="jugar('16')"></div>
+<div class="div" id="17" onclick="jugar('17')"></div>
+<div class="div" id="18" onclick="jugar('18')"></div>
+<div class="div" id="19" onclick="jugar('19')"></div>
+<div class="div" id="20" onclick="jugar('20')"></div>
+<br>
+<button id="terminajuego" onclick="termina()" disabled> acabar</button>
+<button id="empiezajuego" onclick="empieza()">empezar</button>
+<button id="resetear" onclick="resetear()">resetear</button>
+<p id="resultado"></p>
+<p id="puntuacionMaxima"></p>
+<table>
+    <tr><th>Puntuaciones</th></tr>
+    <tr><td id="puntuacion0"></td></tr>
+    <tr><td id="puntuacion1"></td></tr>
+    <tr><td id="puntuacion2"></td></tr>
+    <tr><td id="puntuacion3"></td></tr>
+    <tr><td id="puntuacion4"></td></tr>
+</table>
+<script>
+    var puntos = 0;
+    var clicks;
+    var arrayPuntuaciones;
+
+
+    function inicializar() {
+
+        if (!localStorage.clicks){
+
+            arrayPuntuaciones=[];
+            for (var i=0;i<5;i++){
+                arrayPuntuaciones[i]=0;
+                var id="puntuacion"+i;
+               // document.getElementById(id).innerHTML="0";
+                }
+
+        }else{
+            document.getElementById("puntuacion0").innerHTML=localStorage.clicks;
+        }
+
+       // document.getElementById("puntuacionMaxima").innerHTML = "la puntuacion maxima es " + localStorage.clicks;
+    }
+
+    function empieza() {
+
+        document.getElementById("terminajuego").disabled = false;
+        document.getElementById("empiezajuego").disabled = true;
+        puntos = 0;
+        myVar = setInterval(ponerTopo, 2000);
+        myVar2 = setInterval(ponerTopo, 700);
+
+
+    }
+    function termina() {
+
+        clicks=closureVariar(0);
+        if (arrayPuntuaciones[4]<clicks) {
+            arrayPuntuaciones.push(clicks);
+            arrayPuntuaciones.sort(function (a,b) {
+                return b-a;
+            });
+            arrayPuntuaciones.pop();
+            localStorage.clicks = arrayPuntuaciones;
+
+        }
+        document.getElementById("terminajuego").disabled = true;
+        document.getElementById("empiezajuego").disabled = false;
+        clearInterval(myVar);
+        clearInterval(myVar2);
+        actualizarInformacion();
+    }
+    function actualizarInformacion() {
+       // for (var i=0;i<arrayPuntuaciones.length;i++){
+           // var id="puntuacion"+i;
+            document.getElementById('puntuacion0').innerHTML =localStorage.clicks;
+    //    }
+
+    }
+
+    function jugar(caja) {
+        if (document.getElementById(caja).className == "topo") {
+           mostrar(1);
+            document.getElementById(caja).className = "topo2";
+        } else {
+          mostrar(-1);
+        }
+
+    }
+
+    function ponerTopo() {
+        var caja = Math.floor(Math.random() * 20) + 1;
+        document.getElementById(caja).className = "topo";
+        setTimeout(function () {
+            document.getElementById(caja).className = "div";
+        }, 2000)
+    }
+
+    function inicializarYObtenerClosure() {
+        var contador = 0;
+
+        function variar(variacion) {
+            contador = contador + variacion;
+            return contador;
+        }
+
+        return variar;
+    }
+
+    var closureVariar = inicializarYObtenerClosure();
+
+    function mostrar(variacion) {
+        document.getElementById("resultado").innerHTML = "Los puntos son :" + closureVariar(variacion);
+    }
+
+    function resetear() {
+        localStorage.removeItem("clicks");
+
+        inicializar();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adivina Numero</title>
+    <style type="text/css">
+
+    </style>
+<script>
+    "use strict";
+    //INICIACION
+
+
+    var numero;
+    var pinformacionParausuario;
+
+
+
+    function inicializar(valorNumeroSecreto) {
+        pinformacionParausuario=document.getElementById("parrafo");
+        numero=new Numero(valorNumeroSecreto);
+        numero.annadirSuscriptorIntentoRealizado(actualizarinformacion);
+    }
+
+
+    //MANEJADORES / HANDLERS
+    function ocultarinputNumeroGuardado() {
+        document.getElementById("numeroGuardado").style.display = "none";
+        document.getElementById("segundoNumeroGuardado").style.display = "inline"
+
+        
+    }
+
+ function actualizarinformacion(diferencia) {
+       
+        if (diferencia > 0) {
+            pinformacionParausuario.innerHTML="el numero es mayor";
+        }else if (diferencia< 0){
+            pinformacionParausuario.innerHTML="el numero es menor";
+
+     }else{
+            pinformacionParausuario.innerHTML="los numero son iguales";
+        }
+        
+ }
+ function botonIntentarClick() {
+        ocultarinputNumeroGuardado();
+        inicializar(numeroGuardado.value);
+
+ }
+
+
+    //LOGICA INTERNA
+    //Responsabilidades:
+    //
+    //      -Comparar numeros
+    //      - Informar a traves de una varibale como sera el numero introducido
+
+    class Numero{
+        constructor(valorNumeroSecreto){
+            this.SuscriptoresIntentoRealizado=[];
+            this.numero1=valorNumeroSecreto;
+
+
+        }
+
+        annadirSuscriptorIntentoRealizado(s){
+            this.SuscriptoresIntentoRealizado.push(s);
+
+        }
+        retirarSuscriptoresIntentoRealizado(s){
+            this.SuscriptoresIntentoRealizado.delete(s);
+        }
+        notificarSuscriptoresIntentoRealizado(diferencia) {
+            // Para CADA uno de los suscriptores (que son funciones),
+            // se ejecuta una llamada a la función suscriptora pasándole
+            // como parámetro la información correspondiente.
+            this.SuscriptoresIntentoRealizado.forEach(suscriptor => suscriptor(diferencia));
+        }
+
+
+        // le paso un valor por parametro para enviarselo desde el onclick
+        // este sera numero del jugador uno
+        setNumero1(n1){
+            this.numero1=parseInt(n1);
+            this.notificarSuscriptoresIntentoRealizado();
+        }
+
+        // le paso un valor por parametro para enviarselo desde el onclick
+        // este sera numero del jugador dos que tendra que ser igual que el del jugador uno
+
+
+        intentar(n) {
+         var diferencia;
+            diferencia=this.numero1-n;
+            this.notificarSuscriptoresIntentoRealizado(diferencia);
+
+        }
+
+
+          // la funcion comparar a traves de un varibale de retorno on me indicara como es el numero introducido
+        // para posteriormente en el manejador usarla y gestionarla
+
+
+    }
+</script>
+</head>
+<body >
+<input type="number" id="numeroGuardado" placeholder="Introduce numero"><br>
+<input type="number" id="segundoNumeroGuardado" placeholder="Introduce numero"  style="display: none"><br>
+<button onclick="botonIntentarClick()" >guardar</button>
+<button  onclick="numero.intentar(segundoNumeroGuardado.value)" >intentar</button>
+
+
+<p id="parrafo"></p>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>localStorage</title>
+
+   <script>
+       var nombreIntroducido;
+       var arrayNombres;
+       function inicializar() {
+           nombreIntroducido=document.getElementById("nombreIntroducido");
+           if (!localStorage.arrayNombres){
+               arrayNombres=[];
+           }else {
+               arrayNombres=JSON.parse(localStorage.arrayNombres);
+           }
+
+
+           actualizarInformacion();
+       }
+function annadirNombreIntroducido() {
+           nombreGuardado=nombreIntroducido.value;
+           arrayNombres.push(nombreGuardado);
+           localStorage.arrayNombres=JSON.stringify(arrayNombres);
+
+           actualizarInformacion();
+}
+function actualizarInformacion() {
+document.getElementById("lista").innerHTML=JSON.stringify(arrayNombres);
+
+}
+
+   </script>
+</head>
+
+<body onload="inicializar()">
+
+<form>
+<input type="text" id="nombreIntroducido">
+<input type="submit" onclick="annadirNombreIntroducido()">
+</form>
+<p id="lista"></p>
+</body>
+</html>

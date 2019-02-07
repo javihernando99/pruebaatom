@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="">
+    <input type="text" id="numero1">
+    <input type="text" id="numero2">
+    <input type="button" value="sumar" onclick="alert(suma());">
+</form>
+<script>
+    /**
+     * los parametros que se pasan a la funcion no son lo
+     * los mimos que hemos declarado anteriormente si no son dos numero
+     * que necesita la funcion
+     * @param numero1
+     * @param numero2
+     */
+    var suma = function () {
+        var numero1 = parseFloat(document.getElementById("numero1").value);
+        var numero2 = parseFloat(document.getElementById("numero2").value);
+        var resultado = numero1 + numero2;
+        return resultado;
+    }
+
+
+</script>
+</body>
+</html>

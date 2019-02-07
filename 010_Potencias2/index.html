@@ -1,0 +1,24 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Potencias de 2</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+    <input id="valor" type="text" value="1" required onkeyup="handleValorChangeOKeyUp()" onchange="handleValorChangeOKeyUp()" onfocus="handleValorFocus()" onblur="handleValorBlur()">
+
+    <button id="botonArrancar" onclick="handleArrancarClick()">Arrancar</button>
+    <button id="botonParar" onclick="handlePararClick()">Parar</button>
+    <button id="botonReiniciar" onclick="handleReiniciarClick()">Reiniciar</button>
+
+    <br />
+
+    <span id="mensajeError" class="oculto">El valor introducido debe ser potencia de 2.</span>
+
+    <script src="js/scripts.js"></script>
+</body>
+
+</html>

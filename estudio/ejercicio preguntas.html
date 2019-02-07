@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>preguntas</title>
+</head>
+<body>
+<h1 id="preguntas"></h1>
+<input type="text" id="dato">
+<input type="submit" id="boton" onclick="compruebaResultado()">
+<p id="demo"></p>
+<script>
+    var preguntas = [
+            ["como se llamo la mascota del mundial de 1982", "naranjito"],
+            ["¿cuanto es 3*3", "9"],
+            ["cuantos jugadores participan en un partido de futbol", "22"]
+        ],
+        pregunta, respuesta,
+        formuladas = 0,
+        acertadas = 0,
+        i;
+    hazPregunta();
+
+/*
+    document.getElementById('boton').addEventListener('click', function () {
+        var entrada = document.getElementById("dato").value;
+        if (entrada == respuesta) {
+            acertadas++;
+        }
+        if (formuladas < 3) {			// Si aun no se han hecho 5 preguntas...
+            hazPregunta();			// ... seguir preguntando
+        }
+        else {						// de lo contrario...
+            muestraResultado();		// ... finaliza juego mostrando el resultado
+        }
+    });*/
+
+
+        function compruebaResultado() {
+            var campoResultado = document.getElementById("dato").value;
+            if (campoResultado == respuesta) {
+                acertadas++;
+            }
+             if (formuladas < 3) {
+                hazPregunta();
+            } else {
+                muestraResultado();
+            }
+
+        }
+
+    function hazPregunta() {
+        //se almacena una pregunta y su repuesta lo hace el splice que coge un eleemento del array y num aleat para que sea  alaeatoria
+
+        var almacenarPregunta = preguntas.splice(numAleat(0, preguntas.length - 1), 1);
+        pregunta = almacenarPregunta[0][0];
+        respuesta = almacenarPregunta[0][1];
+        document.getElementById("preguntas").innerHTML = pregunta;
+        document.getElementById("dato").value = "";
+        formuladas++;
+
+    }
+
+    function muestraResultado() {
+        var resultado;      // para guardar el mensaje con el resultado
+        if (acertadas == 3) {
+            document.getElementById("demo").innerHTML = "eres un maquina";
+        } else {
+            document.getElementById("demo").innerHTML = "eres un paquete";
+        }
+    }
+
+    function numAleat(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+
+    }
+
+
+</script>
+</body>
+</html>

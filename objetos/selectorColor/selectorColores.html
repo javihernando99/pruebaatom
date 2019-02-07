@@ -1,0 +1,371 @@
+<html>
+
+<head>
+
+    <style type="text/css">
+        #cuadro-color {
+            display: inline-block;
+            border: 2px solid gray;
+            width: 15em;
+            height: 6em;
+            background-color: red;
+        }
+
+        .cuadroPaleta {
+            display: inline-block;
+            border: 2px solid black;
+            width: 1em;
+            height: 1em;
+
+        }
+
+        #cuadroPaleta0 {
+            background-color: rgb(255, 0, 0);
+        }
+
+        #cuadroPaleta1 {
+            background-color: rgb(0, 255, 0);
+        }
+
+        #cuadroPaleta2 {
+            background-color: rgb(0, 0, 255);
+        }
+
+        #cuadroPaleta3 {
+            background-color: rgb(0, 0, 0);
+        }
+
+        #cuadroPaleta4 {
+            background-color: rgb(255, 255, 255);
+        }
+
+        #cuadroPaleta5 {
+            background-color: rgb(125, 60, 152);
+        }
+
+        #cuadroPaleta6 {
+            background-color: rgb(241, 196, 15);
+        }
+
+        #cuadroPaleta7 {
+            background-color: rgb(112, 123, 124);
+        }
+
+        #cuadroPaleta8 {
+            background-color: rgb(135, 54, 0);
+        }
+
+        #cuadroPaleta9 {
+            background-color: rgb(0, 0, 63);
+        }
+    </style>
+
+
+    <script>
+
+        "use strict";
+
+        // INICIALIZACIÓN
+
+        var color;
+        var divCuadroColor;
+        var inputR;
+        var inputG;
+        var inputB;
+        var inputRangeR;
+        var inputRangeG;
+        var inputRangeB;
+        var inputHex;
+        var arrayColores;
+        var colorPaleta0;
+        var colorPaleta1;
+        var colorPaleta2;
+        var colorPaleta3;
+        var colorPaleta4;
+        var colorPaleta5;
+        var colorPaleta6;
+        var colorPaleta7;
+        var colorPaleta8;
+        var colorPaleta9;
+
+        function inicializar() {
+            divCuadroColor = document.getElementById("cuadro-color");
+            inputR = document.getElementById("inputR");
+            inputG = document.getElementById("inputG");
+            inputB = document.getElementById("inputB");
+            inputRangeR = document.getElementById("inputRangeR");
+            inputRangeG = document.getElementById("inputRangeG");
+            inputRangeB = document.getElementById("inputRangeB");
+            inputHex = document.getElementById("ponerHex");
+
+            color = new Color();
+
+            colorPaleta0 = new Color();
+            colorPaleta0.setR(255);
+            colorPaleta0.setG(0);
+            colorPaleta0.setB(0);
+
+            colorPaleta1 = new Color();
+            colorPaleta1.setR(0);
+            colorPaleta1.setG(255);
+            colorPaleta1.setB(0);
+
+            colorPaleta2 = new Color();
+            colorPaleta2.setR(0);
+            colorPaleta2.setG(0);
+            colorPaleta2.setB(255);
+
+            colorPaleta3 = new Color();
+            colorPaleta3.setR(0);
+            colorPaleta3.setG(0);
+            colorPaleta3.setB(0);
+
+            colorPaleta4 = new Color();
+            colorPaleta4.setR(255);
+            colorPaleta4.setG(255);
+            colorPaleta4.setB(255);
+
+            colorPaleta5 = new Color();
+            colorPaleta5.setR(125);
+            colorPaleta5.setG(60);
+            colorPaleta5.setB(152);
+
+            colorPaleta6 = new Color();
+            colorPaleta6.setR(241);
+            colorPaleta6.setG(196);
+            colorPaleta6.setB(15);
+
+            colorPaleta7 = new Color();
+            colorPaleta7.setR(112);
+            colorPaleta7.setG(123);
+            colorPaleta7.setB(124);
+
+            colorPaleta8 = new Color();
+            colorPaleta8.setR(135);
+            colorPaleta8.setG(54);
+            colorPaleta8.setB(0);
+
+            colorPaleta9 = new Color();
+            colorPaleta9.setR(0);
+            colorPaleta9.setG(0);
+            colorPaleta9.setB(63);
+
+            arrayColores = new Array(colorPaleta0, colorPaleta1, colorPaleta2, colorPaleta3, colorPaleta4, colorPaleta5, colorPaleta6, colorPaleta7, colorPaleta8, colorPaleta9);
+            color.annadirSuscriptorValorCambiado(actualizarFondoCuadroColor);
+            color.annadirSuscriptorValorCambiado(actualizarInputs);
+            color.annadirSuscriptorValorCambiado(actualizarInputsRangos);
+            color.annadirSuscriptorValorCambiado(actualizarParrafoHex);
+            color.annadirSuscriptorValorCambiado(quitarEstiloPaleta);
+            color.annadirSuscriptorValorCambiado(comprobarColorPaleta);
+
+        }
+
+
+        // MANEJADORES / HANDLERS
+
+        function actualizarFondoCuadroColor() {
+            divCuadroColor.style.backgroundColor = color.obtenerParaCss();
+        }
+
+        function actualizarInputs() {
+            inputR.value = color.getR();
+            inputG.value = color.getG();
+            inputB.value = color.getB();
+        }
+
+        function actualizarInputsRangos() {
+            inputRangeR.value = color.getR();
+            inputRangeG.value = color.getG();
+            inputRangeB.value = color.getB();
+        }
+
+        function actualizarParrafoHex() {
+            inputHex.innerHTML = color.obtenerHex();
+
+        }
+
+        function comprobarColorPaleta() {
+            for (var indice in arrayColores) {
+                if (color.equals(arrayColores[indice]) > 0) {
+                    document.getElementById("cuadroPaleta" + indice).style.border = "15px";
+                    break;
+                }
+            }
+        }
+
+        function quitarEstiloPaleta() {
+            for (var indice in arrayColores) {
+                document.getElementById("cuadroPaleta" + indice).style.border = "";
+            }
+        }
+
+
+        // LÓGICA INTERNA
+
+        // Responsabilidades:
+        //   - Representar un color.
+        //   - Saber expresar ese color en distintos formatos.
+        class Color {
+            constructor() {
+                this.suscriptoresValorCambiado = [];
+
+                this.r = 0;
+                this.g = 0;
+                this.b = 0;
+            }
+
+            annadirSuscriptorValorCambiado(s) {
+                this.suscriptoresValorCambiado.push(s);
+
+                s(); // Le llamamos para que conozca el valor actual.
+            }
+
+            retirarSuscriptorValorCambiado(s) {
+                this.suscriptoresValorCambiado.delete(s);
+            }
+
+            notificarSuscriptoresValorCambiado() {
+                // Para CADA uno de los suscriptores (que son funciones),
+                // se ejecuta una llamada a la función suscriptora pasándole
+                // como parámetro la información correspondiente.
+                this.suscriptoresValorCambiado.forEach(suscriptor => suscriptor());
+            }
+
+            setR(r) {
+                this.r = parseFloat(r);
+
+                this.notificarSuscriptoresValorCambiado();
+            }
+
+            getR() {
+                return this.r;
+            }
+
+            setG(g) {
+                this.g = parseFloat(g);
+
+                this.notificarSuscriptoresValorCambiado();
+            }
+
+            getG() {
+                return this.g;
+            }
+
+            setB(b) {
+                this.b = parseFloat(b);
+
+                this.notificarSuscriptoresValorCambiado();
+            }
+
+            getB() {
+                return this.b;
+            }
+
+            obtenerParaCss() {
+                return "rgb(" + this.getR() + ", " + this.getG() + ", " + this.getB() + ")";
+            }
+
+            aplicarFactorAclarado(valor, factor) {
+                valor = parseFloat(valor);
+                factor = parseFloat(factor);
+
+                return valor + factor * (255 - valor);
+            }
+
+            aplicarFactorOscurecimiento(valor, factor) {
+                valor = parseFloat(valor);
+                factor = parseFloat(factor);
+
+                return valor - factor * valor;
+            }
+
+            obtenerHex() {
+                return "#" + this.convertiraHex(this.getR()) + this.convertiraHex(this.getG()) + this.convertiraHex(this.getB());
+            }
+
+            convertiraHex(number) {
+                number = parseInt(number);
+                if (number < 16) {
+                    return "0" + number.toString(16).toUpperCase();
+                }
+                return number.toString(16).toUpperCase();
+            }
+
+            aclarar(factor) {
+                factor = parseFloat(factor);
+
+                this.r = this.aplicarFactorAclarado(this.r, factor);
+                this.g = this.aplicarFactorAclarado(this.g, factor);
+                this.b = this.aplicarFactorAclarado(this.b, factor);
+
+                this.notificarSuscriptoresValorCambiado();
+            }
+
+            oscurecer(factor) {
+                factor = parseFloat(factor);
+
+                this.r = this.aplicarFactorOscurecimiento(this.r, factor);
+                this.g = this.aplicarFactorOscurecimiento(this.g, factor);
+                this.b = this.aplicarFactorOscurecimiento(this.b, factor);
+
+                this.notificarSuscriptoresValorCambiado();
+            }
+
+            equals(color) {
+                var valor = -1;
+                if (this.getR() == color.getR() && this.getG() == color.getG() && this.getB() == color.getB()) {
+                    valor = 1;
+
+                }
+                return valor;
+            }
+
+        }
+
+    </script>
+
+</head>
+
+
+<body onload="inicializar()">
+
+<div id="cuadro-color"></div>
+
+<br>
+
+<input type="number" min="0" max="255" id="inputR" placeholder="rojo" value="0" onkeyup="color.setR(this.value)"
+       onchange="color.setR(this.value)">
+<input type="number" min="0" max="255" id="inputG" placeholder="verde" value="0" onkeyup="color.setG(this.value)"
+       onchange="color.setG(this.value)">
+<input type="number" min="0" max="255" id="inputB" placeholder="azul" value="0" onkeyup="color.setB(this.value)"
+       onchange="color.setB(this.value)">
+
+<br>
+
+<button onclick="color.oscurecer(0.5)">Oscurecer mucho</button>
+<button onclick="color.oscurecer(0.1)">Oscurecer poco</button>
+<button onclick="color.aclarar(0.1)">Aclarar poco</button>
+<button onclick="color.aclarar(0.5)">Aclarar mucho</button>
+
+
+<br>
+<label>R: </label><input type="range" max="255" min="0" value="0" id="inputRangeR" onchange="color.setR(this.value)">
+<label>G: </label><input type="range" max="255" min="0" value="0" id="inputRangeG" onchange="color.setG(this.value)">
+<label>B: </label><input type="range" max="255" min="0" value="0" id="inputRangeB" onchange="color.setB(this.value)">
+<br>
+<p id="ponerHex"></p>
+
+<p>Paleta de colores</p>
+<div class="cuadroPaleta" id="cuadroPaleta0" onclick="color.setR(255),color.setG(0),color.setB(0)"></div>
+<div class="cuadroPaleta" id="cuadroPaleta1" onclick="color.setR(0),color.setG(255),color.setB(0)"></div>
+<div class="cuadroPaleta" id="cuadroPaleta2" onclick="color.setR(0),color.setG(0),color.setB(255)"></div>
+<div class="cuadroPaleta" id="cuadroPaleta3" onclick="color.setR(0),color.setG(0),color.setB(0)"></div>
+<div class="cuadroPaleta" id="cuadroPaleta4" onclick="color.setR(255),color.setG(255),color.setB(255)"></div>
+<div class="cuadroPaleta" id="cuadroPaleta5" onclick="color.setR(125),color.setG(60),color.setB(152)"></div>
+<div class="cuadroPaleta" id="cuadroPaleta6" onclick="color.setR(241),color.setG(196),color.setB(15)"></div>
+<div class="cuadroPaleta" id="cuadroPaleta7" onclick="color.setR(112),color.setG(123),color.setB(124)"></div>
+<div class="cuadroPaleta" id="cuadroPaleta8" onclick="color.setR(135),color.setG(54),color.setB(0)"></div>
+<div class="cuadroPaleta" id="cuadroPaleta9" onclick="color.setR(0),color.setG(0),color.setB(63)"></div>
+</body>
+
+</html>
